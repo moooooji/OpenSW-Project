@@ -64,7 +64,7 @@ def check_log():
             if time.time() - ban_start_time >= ban_time_minutes * 60:
                 del banned_users[username]
                 unban_user(username, ip_adress)
-#test
+#testttt
 if __name__ == "__main__":
     while True:
         check_log()
