@@ -5,9 +5,7 @@ import subprocess
 # 유튜브 강의 코드
 
 # 정규표현식 패턴 (로그에서 실패한 ssh 로그인 메시지를 찾기 위해 사용)
-failed_ssh_pattern = (
-    r"Failed password for (invalid user )?(\w+) from (\d+\.\d+\.\d+\.\d+)"
-)
+failed_ssh_pattern = "Failed password for (invalid user)?(\w+) from (\d+\.\d+\.\d+\.\d+)"
 
 # 실패 횟수와 차단 시간 설정
 max_failures = 5
@@ -32,7 +30,7 @@ def unban_user(username, ip_adress):
 
 
 def check_log():
-    with open("../var/log/auth_log", "r") as auth_log:
+    with open("/var/log/auth.log", "r") as auth_log:
         for line in auth_log:
             # 로그에서 실패한 ssh 로그인을 찾음
             match = re.search(failed_ssh_pattern, line)
@@ -40,26 +38,26 @@ def check_log():
                 timestamp = time.mktime(time.strptime(line[:15], "%b %d %H:%M:%S"))
 
                 # 1분 이내의 로그인만 처리
-                if timestamp >= start_time - 60:
-                    username = match.group(2)
-                    ip_adress = match.group(3)
+                # if timestamp >= start_time - 60:
+                #     username = match.group(2)
+                #     ip_adress = match.group(3)
 
-                    if username in banned_users:
-                        banned_users[username] += 1
-                        if banned_users[username] >= max_failures:
-                            if (
-                                username not in banned_users
-                                or banned_users[username] >= max_failures
-                            ):
-                                print(
-                                    f"Blocking {username} from {ip_adress} for {ban_time_minutes} minutes"
-                                )
-                                ban_user(ip_adress)
-                                banned_users[username] = (
-                                    time.time()
-                                )  # 차단 시작 시간 기록
-                    else:
-                        banned_users[username] = 1
+                #     if username in banned_users:
+                #         banned_users[username] += 1
+                #         if banned_users[username] >= max_failures:
+                #             if (
+                #                 username not in banned_users
+                #                 or banned_users[username] >= max_failures
+                #             ):
+                #                 print(
+                #                     f"Blocking {username} from {ip_adress} for {ban_time_minutes} minutes"
+                #                 )
+                #                 ban_user(ip_adress)
+                #                 banned_users[username] = (
+                #                     time.time()
+                #                 )  # 차단 시작 시간 기록
+                #     else:
+                #         banned_users[username] = 1
 
         # 차단된 사용자 중 시간이 지난 사용자 차단 해제
         for username, ban_start_time in list(banned_users.items()):
@@ -70,4 +68,4 @@ def check_log():
 if __name__ == "__main__":
     while True:
         check_log()
-        time.sleep(60)  # 1분마다 로그 확인
+        time.sleep(3)  # 1분마다 로그 확인
