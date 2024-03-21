@@ -2,7 +2,7 @@ import time
 import re
 import subprocess
 
-# 유튜브 강의 코드
+# 유튜브 강의 코드ㅣㅣㅣ
 
 # 정규표현식 패턴 (로그에서 실패한 ssh 로그인 메시지를 찾기 위해 사용)
 failed_ssh_pattern = "Failed password for (invalid user)?(\w+) from (\d+\.\d+\.\d+\.\d+)"
