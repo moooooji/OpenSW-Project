@@ -41,7 +41,7 @@ def check_log():
             # 로그에서 실패한 ssh 로그인을 찾음
             match = re.search(failed_ssh_pattern, line)
             if match:
-                filtered_ip = match.group().split("from")[1].strip() # ip만 파싱
+                filtered_ip = match.group().split(" ")[5]
                 detail = handler.getDetails(filtered_ip)
                 print(detail.all) # ip에 대한 모든 정보 출력
                 timestamp = time.mktime(time.strptime(line[:15], "%b %d %H:%M:%S"))
