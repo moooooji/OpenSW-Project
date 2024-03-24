@@ -1,7 +1,13 @@
 import time
 import re
 import subprocess
+import ipinfo
+import pprint
 
+access_token = "39bd4f67da2f8a"
+handler = ipinfo.getHandler(access_token)
+
+filterd_ip = ""
 # 유튜브 강의 코드
 
 # 정규표현식 패턴 (로그에서 실패한 ssh 로그인 메시지를 찾기 위해 사용)
@@ -35,6 +41,9 @@ def check_log():
             # 로그에서 실패한 ssh 로그인을 찾음
             match = re.search(failed_ssh_pattern, line)
             if match:
+                filtered_ip = match.group().split("from")[1].strip() # ip만 파싱
+                detail = handler.getDetails(filtered_ip)
+                print(detail.all) # ip에 대한 모든 정보 출력
                 timestamp = time.mktime(time.strptime(line[:15], "%b %d %H:%M:%S"))
 
                 # 1분 이내의 로그인만 처리
@@ -60,10 +69,10 @@ def check_log():
                 #         banned_users[username] = 1
 
         # 차단된 사용자 중 시간이 지난 사용자 차단 해제
-        for username, ban_start_time in list(banned_users.items()):
-            if time.time() - ban_start_time >= ban_time_minutes * 60:
-                del banned_users[username]
-                unban_user(username, ip_adress)
+        # for username, ban_start_time in list(banned_users.items()):
+        #     if time.time() - ban_start_time >= ban_time_minutes * 60:
+        #         del banned_users[username]
+        #         unban_user(username, ip_adress)
 
 if __name__ == "__main__":
     while True:
