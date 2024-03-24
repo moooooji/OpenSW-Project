@@ -3,6 +3,13 @@ import re
 import subprocess
 import ipinfo
 import pprint
+import pymysql
+
+conn = pymysql.connect(host='127.0.0.1', user='root', db='s2r', charset='utf8')
+cur = conn.cursor()
+cur.execute("SELECT * FROM ipInfo")
+result = cur.fetchall()[0][1]
+print(result) # mysql 연동 테스트
 
 access_token = "39bd4f67da2f8a"
 handler = ipinfo.getHandler(access_token)
@@ -44,6 +51,12 @@ def check_log():
                 filtered_ip = match.group().split(" ")[5]
                 detail = handler.getDetails(filtered_ip)
                 print(detail.all) # ip에 대한 모든 정보 출력
+
+                sql = "INSERT INTO `ipInfo` (ip) VALUES (%s);" # ip DB 저장
+                data = (filtered_ip)
+                cur.execute(sql, data)
+                conn.commit()
+
                 timestamp = time.mktime(time.strptime(line[:15], "%b %d %H:%M:%S"))
 
                 # 1분 이내의 로그인만 처리
