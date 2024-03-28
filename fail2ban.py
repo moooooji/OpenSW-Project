@@ -74,8 +74,8 @@ def check_log():
                     banned_ip = result[0][1]
                     banned_start_time = result[0][2]
                     
-                    if float(banned_start_time) - time.time() > 60: # ban 시간 1분 이상이면 언밴
-                            unban_user(banned_ip)
+                    if time.time() - float(banned_start_time) > 60: # ban 시간 1분 이상이면 언밴
+                            unban_user(username, banned_ip)
 
 
                 # ip = match.group().split(" ")[5]
