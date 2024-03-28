@@ -38,26 +38,26 @@ def check_log():
                 timestamp = time.mktime(time.strptime(line[:15], "%b %d %H:%M:%S"))
 
                 # 1분 이내의 로그인만 처리
-                # if timestamp >= start_time - 60:
-                #     username = match.group(2)
-                #     ip_adress = match.group(3)
+                if timestamp >= start_time - 60:
+                    username = match.group(2)
+                    ip_adress = match.group(3)
 
-                #     if username in banned_users:
-                #         banned_users[username] += 1
-                #         if banned_users[username] >= max_failures:
-                #             if (
-                #                 username not in banned_users
-                #                 or banned_users[username] >= max_failures
-                #             ):
-                #                 print(
-                #                     f"Blocking {username} from {ip_adress} for {ban_time_minutes} minutes"
-                #                 )
-                #                 ban_user(ip_adress)
-                #                 banned_users[username] = (
-                #                     time.time()
-                #                 )  # 차단 시작 시간 기록
-                #     else:
-                #         banned_users[username] = 1
+                    if username in banned_users:
+                        banned_users[username] += 1
+                        if banned_users[username] >= max_failures:
+                            if (
+                                username not in banned_users
+                                or banned_users[username] >= max_failures
+                            ):
+                                print(
+                                    f"Blocking {username} from {ip_adress} for {ban_time_minutes} minutes"
+                                )
+                                ban_user(ip_adress)
+                                banned_users[username] = (
+                                    time.time()
+                                )  # 차단 시작 시간 기록
+                    else:
+                        banned_users[username] = 1
 
         # 차단된 사용자 중 시간이 지난 사용자 차단 해제
         for username, ban_start_time in list(banned_users.items()):
