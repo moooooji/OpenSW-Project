@@ -4,15 +4,11 @@ import subprocess
 import pprint
 from init import *
 
-<<<<<<< HEAD
-# 유튜브 강의 코드ㅣㅣㅣ
-=======
 conn, cur = db_connect()
 handler = ipinfo_connect()
 
 filterd_ip = ""
 # 유튜브 강의 코드
->>>>>>> S2R-11-fail2ban-SG
 
 # 정규표현식 패턴 (로그에서 실패한 ssh 로그인 메시지를 찾기 위해 사용)
 failed_ssh_pattern = r"Failed password for (invalid user )?(\w+) from (\d+\.\d+\.\d+\.\d+)"
@@ -120,8 +116,4 @@ def check_log():
 if __name__ == "__main__":
     while True:
         check_log()
-<<<<<<< HEAD
-        time.sleep(3)  # 1분마다 로그 확인
-=======
         time.sleep(60)
->>>>>>> S2R-11-fail2ban-SG
